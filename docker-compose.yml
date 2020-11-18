@@ -3,7 +3,7 @@ services:
  mysql:
   image: mysql:latest
   restart: always
-  container_name: Full_2020_080749
+  container_name: Full2020_086292
   volumes:
    - db_data:/var/lib/mysql
   ports:
@@ -13,13 +13,13 @@ services:
     ipv4_address: 10.0.10.3
   environment:
       MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "MJELEN"
+      MYSQL_DATABASE: "AGLINKA"
       MYSQL_USER: "admin"
       MYSQL_PASSWORD: "admin"
  java:
-  image: chivy95/pfswcho_lab4:latest
+  image: agnieszkasia/zad:latest
   stdin_open: true
-  container_name: MjelenJavaCTN
+  container_name: AGlinka
   depends_on:
    - mysql
   networks:

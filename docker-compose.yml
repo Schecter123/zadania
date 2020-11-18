@@ -1,0 +1,34 @@
+version: "3.7"
+services: 
+ mysql:
+  image: mysql:latest
+  restart: always
+  container_name: Full_2020_080749
+  volumes:
+   - db_data:/var/lib/mysql
+  ports:
+   - "3306:3306"
+  networks:
+   BridgeZadanie1:
+    ipv4_address: 10.0.10.3
+  environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "MJELEN"
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "admin"
+ java:
+  image: chivy95/pfswcho_lab4:latest
+  stdin_open: true
+  container_name: MjelenJavaCTN
+  depends_on:
+   - mysql
+  networks:
+   - BridgeZadanie1
+networks:
+ BridgeZadanie1:
+  driver: bridge
+  ipam:
+   config:
+    - subnet: 10.0.10.0/24
+volumes:
+ db_data: {}

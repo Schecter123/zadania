@@ -10,8 +10,8 @@ public class Main {
     static final String PASS = "root";
 
     static Scanner in = new Scanner( System.in);
-    private static final String CREATE_TABLE_CARS = "CREATE TABLE IF NOT EXISTS Cars (ID int, BRAND varchar(255), MODEL varchar(255), PRODUCTION_YEAR varchar(255), TYPE varchar(255) );";
-    private static final String SELECT_ALL_FROM_CARS = "SELECT ID, BRAND, MODEL, PRODUCTION_YEAR, TYPE FROM Cars";
+    private static final String CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS Users (ID int, NAME varchar(255), SURNAME varchar(255), YEAR varchar(255), TYPE varchar(255) );";
+    private static final String SELECT_ALL_FROM_USERS = "SELECT ID, NAME, SURNAME, YEAR, TYPE FROM Users";
 
     public static void main(String[] args) {
 
@@ -20,11 +20,11 @@ public class Main {
             Class.forName("com.mysql.jdbc.Driver");
             TimeUnit.SECONDS.sleep(10);
             System.out.println("Connecting to database...");
-            stmt.executeUpdate(CREATE_TABLE_CARS);
+            stmt.executeUpdate(CREATE_TABLE_USERS);
             String selectedOperation;
             do
             {
-                System.out.println("1. Show DB data\n2. Insert car\n3. Edit car by ID\n4. Delete car by ID\nS. Press E to Exit");
+                System.out.println("1. Show DB data\n2. Insert user\n3. Edit user by ID\n4. Delete user by ID\nS. Press E to Exit");
                 selectedOperation = in.nextLine();
                 switch( selectedOperation )
                 {
@@ -32,13 +32,13 @@ public class Main {
                         getResults(stmt);
                         break;
                     case "2" :
-                        insertCar(stmt);
+                        insertUser(stmt);
                         break;
                     case "3" :
-                        updateCar(stmt);
+                        updateUser(stmt);
                         break;
                     case "4" :
-                        deleteCarById(stmt);
+                        deleteUserById(stmt);
                         break;
                 }
             }while (!selectedOperation.toUpperCase().equals("E"));
@@ -47,25 +47,25 @@ public class Main {
         }
     }
 
-    private static void deleteCarById(Statement stmt) throws SQLException {
-        ResultSet rsss = stmt.executeQuery(SELECT_ALL_FROM_CARS);
+    private static void deleteUserById(Statement stmt) throws SQLException {
+        ResultSet rsss = stmt.executeQuery(SELECT_ALL_FROM_USERS);
         printOutHeader();
         printOutResult(rsss);
         rsss.close();
         System.out.println("Enter ID to delete");
         final String id = in.nextLine();
-        final String deleteSql = " DELETE FROM Cars WHERE ID= '"+id+"';";
+        final String deleteSql = " DELETE FROM Users WHERE ID= '"+id+"';";
         stmt.executeUpdate(deleteSql);
     }
 
-    private static void updateCar(Statement stmt) throws SQLException {
+    private static void updateUser(Statement stmt) throws SQLException {
         String type;
         String id;
-        String brand;
-        String model;
+        String name;
+        String surname;
         String sql;
-        String productionYear;
-        ResultSet rss = stmt.executeQuery(SELECT_ALL_FROM_CARS);
+        String year;
+        ResultSet rss = stmt.executeQuery(SELECT_ALL_FROM_USERS);
         printOutHeader();
 
         printOutResult(rss);
@@ -73,50 +73,50 @@ public class Main {
         System.out.println("Enter ID to edit");
         id = in.nextLine();
 
-        System.out.println("Brand: ");
-        brand = in.nextLine();
+        System.out.println("Name: ");
+        name = in.nextLine();
 
-        System.out.println("Model: ");
-        model = in.nextLine();
+        System.out.println("Surname: ");
+        surname = in.nextLine();
 
-        System.out.println("Production year:");
-        productionYear = in.nextLine();
+        System.out.println("Year:");
+        year = in.nextLine();
 
-        System.out.println("Vehicle type");
+        System.out.println("Type");
         type = in.nextLine();
-        sql = " UPDATE Cars SET MODEL = '"+model+"' , BRAND = '"+brand+"', PRODUCTION_YEAR = '"+productionYear+"',TYPE ='"+type+"' WHERE ID= '"+id+"';";
+        sql = " UPDATE Users SET NAME = '"+name+"' , SURNAME = '"+surname+"', YEAR = '"+year+"',TYPE ='"+type+"' WHERE ID= '"+id+"';";
         stmt.executeUpdate(sql);
     }
 
-    private static void insertCar(Statement stmt) throws SQLException {
+    private static void insertUser(Statement stmt) throws SQLException {
         System.out.println("ID");
         final String id = in.nextLine();
 
-        System.out.println("Brand:");
-        final String brand = in.nextLine();
+        System.out.println("Name:");
+        final String name = in.nextLine();
 
-        System.out.println("Model");
-        final String model = in.nextLine();
+        System.out.println("Surname");
+        final String surname = in.nextLine();
 
-        System.out.println("Production year:");
-        final String productionYear = in.nextLine();
+        System.out.println("Year:");
+        final String year = in.nextLine();
 
-        System.out.println("Vehicle type");
+        System.out.println("Type");
         final String type = in.nextLine();
         
-        String sql = " INSERT INTO Cars (ID, MODEL, BRAND, PRODUCTION_YEAR,TYPE) VALUES ('"+id+"', '"+model+"', '"+brand+"', '"+productionYear+"','"+type+"')";
+        String sql = " INSERT INTO Users (ID, NAME, SURNAME, YEAR,TYPE) VALUES ('"+id+"', '"+name+"', '"+surname+"', '"+year+"','"+type+"')";
         stmt.executeUpdate(sql);
     }
 
     private static void getResults(Statement stmt) throws SQLException {
-        ResultSet rs = stmt.executeQuery(SELECT_ALL_FROM_CARS);
+        ResultSet rs = stmt.executeQuery(SELECT_ALL_FROM_USERS);
         printOutHeader();
         printOutResult(rs);
         rs.close();
     }
 
     private static void printOutHeader() {
-        System.out.println("ID    BRAND    MODEL    PRODUCTION_YEAR    TYPE");
+        System.out.println("ID    NAME    SURNAME    YEAR    TYPE");
     }
 
     private static void printOutResult(ResultSet rs) throws SQLException {
@@ -127,9 +127,9 @@ public class Main {
         String city;
         while (rs.next()) {
             id = rs.getInt("ID");
-            first = rs.getString("BRAND");
-            last = rs.getString("MODEL");
-            address = rs.getString("PRODUCTION_YEAR");
+            first = rs.getString("NAME");
+            last = rs.getString("SURNAME");
+            address = rs.getString("YEAR");
             city = rs.getString("TYPE");
 
             System.out.println(id + "    " + first + "    " + last + "    " + address + "    " + city);
